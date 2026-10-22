@@ -334,7 +334,9 @@ static void goToClock() {
   } else setPage(Page::Clock);
 }
 
+static void releaseQuoteLayer();
 static void openPhonePage(bool justConnected, bool forQuotes = false) {
+  releaseQuoteLayer();   // 6 KB back for the web page; redrawn when the Quotes screen shows again
   phoneJustConnected = justConnected;
   phoneForQuotes = forQuotes && !justConnected;
   phonePageAt = millis();
@@ -1383,6 +1385,7 @@ static void storageError() {
 
 static void setClockFace(uint8_t face) {
   clockFace = face % FACE_COUNT;
+  if (clockFace != FACE_QUOTE) releaseQuoteLayer();
   customEnabled = clockFace == FACE_GIF;
   if (prefsReady) { preferences.putUChar("face", clockFace); preferences.putBool("custom", customEnabled); }
   currentScene = -1; overlayDirty = true;
@@ -1837,6 +1840,12 @@ static char quoteLayerText[100] = "", quoteWanted[100] = "";
 static enum : uint8_t { QUOTE_STILL, QUOTE_OUT, QUOTE_IN } quoteFade = QUOTE_STILL;
 static uint32_t quoteFadeAt = 0;
 static int quoteAlpha = 256;   // 0 = invisible, 256 = full white
+// Frees the Quotes screen's text layer; the next time that screen shows, it is drawn again.
+static void releaseQuoteLayer() {
+  if (!quoteLayer) return;
+  delete quoteLayer; quoteLayer = nullptr;
+  quoteLayerText[0] = 0; quoteFade = QUOTE_STILL; quoteAlpha = 256;
+}
 static bool quoteFading() { return quoteFade != QUOTE_STILL; }
 // Picks the quote to show and moves the fade along; called while building the clock text.
 static void updateQuoteLayer(const char *wanted) {
@@ -2442,15 +2451,12 @@ static void clockSetup() {
   }
   clockHint = "<  TAP LEFT OR RIGHT FOR MORE  >"; clockHintUntil = 20000;  // first 20 s after start
   allocateSmallFrame(); // Before Wi-Fi starts, while one large free block is available.
-  if (!customAnimation.reserveMemory()) Serial.println("GIF memory: could not reserve it at start-up");
-  logMemory("GIF memory reserved");
-  // Saving or checking a GIF needs a little memory; while that happens nothing is drawn from
-  // the smooth-drawing buffer, so lend it (it comes back after the upload, see ClockWebServer.h).
-  customAnimation.lowMemory = []() {
-    // never while a screen is using it (GIF playing on the clock, Lock In drawing its padlock)
-    if (!smallFrame || page == Page::Clock || page == Page::LockIn) return;
-    releaseSmallFrame();
-    logMemory("Memory short: lent the smooth-GIF buffer");
+  // Saving a GIF or sending thumbnails to the phone works inside the smooth-drawing buffer, which
+  // is free then (never while a GIF plays or Lock In draws in it), so the web page keeps its memory.
+  customAnimation.scratch = []() -> uint8_t * {
+    if (!smallFrame || page == Page::Clock || page == Page::LockIn) return nullptr;
+    smallFrameIndex = -1;   // its picture is overwritten
+    return reinterpret_cast<uint8_t *>(smallFrame);
   };
   runGifBenchmark();
   touch.begin();

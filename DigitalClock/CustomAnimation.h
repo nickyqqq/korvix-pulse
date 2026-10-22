@@ -54,7 +54,7 @@ class CustomAnimation {
   ~CustomAnimation() {
     if (uploadFd_ >= 0) ::close(uploadFd_);
     if (playFd_ >= 0) ::close(playFd_);
-    free(frameBuffer_);
+    if (!borrowed_) free(frameBuffer_);
   }
 
   struct GifInfo { uint32_t id; uint32_t bytes; uint16_t frames, fps; };
@@ -261,7 +261,7 @@ class CustomAnimation {
   // each 16x16 block; returning false stops early (e.g. the user tapped).
   bool decodeFrame(uint16_t frame, uint16_t *out, bool (*onBlock)()) {
     if (!valid_ || frame >= frameCount_) return fail("Custom animation frame is unavailable.");
-    if (!ensureBuffer()) return false;
+    if (!ensureBuffer(true)) return false;
     if (playFd_ < 0) playFd_ = ::open(activePath_, O_RDONLY);
     const FrameLocation &location = frames_[frame];
     if (playFd_ < 0 || ::lseek(playFd_, location.offset, SEEK_SET) < 0 ||
@@ -290,7 +290,7 @@ class CustomAnimation {
 
   bool renderFrame(uint16_t frame, int16_t x = 0, int16_t y = 0) {
     if (!valid_ || frame >= frameCount_) return fail("Custom animation frame is unavailable.");
-    if (!ensureBuffer()) return false;
+    if (!ensureBuffer(true)) return false;
     if (playFd_ < 0) playFd_ = ::open(activePath_, O_RDONLY);
     const FrameLocation &location = frames_[frame];
     if (playFd_ < 0 || ::lseek(playFd_, location.offset, SEEK_SET) < 0 ||
@@ -335,16 +335,11 @@ class CustomAnimation {
   FrameLocation frames_[MAX_FRAMES]{};
   uint8_t *frameBuffer_ = nullptr;
  public:
-  // Called when memory runs out; the clock frees what it can spare (its smooth-drawing buffer).
-  void (*lowMemory)() = nullptr;
-  // Takes the memory GIFs need (one frame + the checker's workspace) once at start-up, before
-  // Wi-Fi breaks the free memory into small pieces; kept for good, so uploads always have it.
-  bool reserveMemory() {
-    if (!verifyWork_) verifyWork_ = malloc(TJPGD_WORKSPACE_SIZE);
-    return ensureBuffer() && verifyWork_ != nullptr;
-  }
+  // Memory the clock can lend while no GIF is on screen (its smooth-drawing buffer, 84 KB), or
+  // nullptr. Saving GIFs and sending thumbnails use it, so they need no memory of their own.
+  uint8_t *(*scratch)() = nullptr;
  private:
-  void *verifyWork_ = nullptr;
+  bool borrowed_ = false;   // frameBuffer_ points into the clock's scratch memory (never freed here)
  private:
   int uploadFd_ = -1, playFd_ = -1;
   uint32_t uploadedBytes_ = 0;
@@ -402,9 +397,12 @@ class CustomAnimation {
   void closePlayback() {
     if (playFd_ >= 0) { ::close(playFd_); playFd_ = -1; }
   }
-  bool ensureBuffer() {
+  // own = true for playback: the frame then decodes INTO the scratch memory, so it can't borrow it.
+  bool ensureBuffer(bool own = false) {
+    uint8_t *lend = (!own && scratch) ? scratch() : nullptr;
+    if (borrowed_ && frameBuffer_ != lend) { frameBuffer_ = nullptr; borrowed_ = false; }  // loan ended
+    if (!frameBuffer_ && lend) { frameBuffer_ = lend; borrowed_ = true; }
     if (!frameBuffer_) frameBuffer_ = static_cast<uint8_t *>(malloc(MAX_JPEG_BYTES));
-    if (!frameBuffer_ && lowMemory) { lowMemory(); frameBuffer_ = static_cast<uint8_t *>(malloc(MAX_JPEG_BYTES)); }
     return frameBuffer_ != nullptr || fail("Not enough memory for a custom animation frame.");
   }
   static bool unlinkIfPresent(const char *path) {
@@ -490,8 +488,9 @@ class CustomAnimation {
     }
     const uint32_t total = static_cast<uint32_t>(info.st_size);
     const uint16_t candidateCount = le16(header + 12);
-    void *workspace = verifyWork_ ? verifyWork_ : malloc(TJPGD_WORKSPACE_SIZE);
-    if (!workspace && lowMemory) { lowMemory(); workspace = malloc(TJPGD_WORKSPACE_SIZE); }
+    if (!ensureBuffer()) { ::close(fd); return false; }
+    // checker workspace: right after the frame inside the borrowed memory, else its own
+    void *workspace = borrowed_ ? static_cast<void *>(frameBuffer_ + MAX_JPEG_BYTES) : malloc(TJPGD_WORKSPACE_SIZE);
     if (!workspace) { ::close(fd); return fail("Not enough memory to verify the animation."); }
     uint32_t offset = sizeof(header);
     const char *failure = "Invalid or truncated animation frame data.";
@@ -518,7 +517,7 @@ class CustomAnimation {
       yield();
     }
     if (ok && offset != total) { ok = false; failure = "Unexpected data after the final animation frame."; }
-    if (workspace != verifyWork_) free(workspace);
+    if (!borrowed_) free(workspace);
     ::close(fd);
     if (!ok) return fail(failure);
     count = candidateCount; width = w; height = h; candidateFps_ = le16(header + 14);

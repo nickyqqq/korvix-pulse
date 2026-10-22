@@ -1,0 +1,56 @@
+{
+  "generated_utc_date": "2026-09-24",
+  "iana_version": "2026d",
+  "python_tzdata_version": "2026.4",
+  "catalog_names": 598,
+  "iana_zones_and_links_verified": 598,
+  "reference_csv_entries_covered": 461,
+  "regions": [
+    "Africa",
+    "America",
+    "Antarctica",
+    "Arctic",
+    "Asia",
+    "Atlantic",
+    "Australia",
+    "Europe",
+    "Indian",
+    "Pacific",
+    "Etc",
+    "Other"
+  ],
+  "valid_utc_start_inclusive": "2020-01-01T00:00:00Z",
+  "valid_utc_end_exclusive": "2101-01-01T00:00:00Z",
+  "unique_schedules": 86,
+  "transition_records": 5606,
+  "verification": "Every distinct TZif schedule checked against Python ZoneInfo monthly and one second before/at/after each transition.",
+  "sources": {
+    "iana": {
+      "url": "https://data.iana.org/time-zones/releases/tzdata2026d.tar.gz",
+      "sha256": "0cb2aa8e333c3dc049badc42a0c61f21987b8cd44e107fa900bad764aacc7767"
+    },
+    "python_tzdata": {
+      "url": "https://files.pythonhosted.org/packages/f9/bc/8737e8d54cf51106118039b83f485a4783112fab49ea9d044b234978a46e/tzdata-2026.4-py2.py3-none-any.whl",
+      "sha256": "c2169a8b0a7a5e9674da5a135ccdfb2b3e671b333ed9fed17b41f73c34476e81"
+    },
+    "reference_csv_names_only": {
+      "url": "https://raw.githubusercontent.com/nayarsystems/posix_tz_db/master/zones.csv",
+      "sha256": "761a0cfee1da4767007978594e1673284a7f36fd105fa597f71bb34bffdc6d91"
+    },
+    "newlib_parser": "https://github.com/espressif/newlib-esp32/blob/esp-4.3.0/newlib/libc/time/tzset_r.c"
+  },
+  "limitations": [
+    "Firmware is a snapshot of IANA rules, not an automatic timezone database updater. Regenerate and reflash after law changes.",
+    "POSIX .rule strings describe indefinite future rules only; they are not historical IANA transition tables.",
+    "Use timeZoneLocalTime for clock/calendar conversion. It includes exact bundled IANA transitions within the validity window, including Palestine and Greenland.",
+    "Factory is IANA's unspecified-local-time placeholder, included only to preserve catalog completeness.",
+    "Etc/GMT offsets follow IANA/POSIX's reversed sign convention: Etc/GMT+7 means UTC minus 7 hours.",
+    "tm_zone/tm_gmtoff, where provided by a host libc, are not populated with zone metadata; clock firmware uses calendar fields and tm_isdst."
+  ],
+  "posix_rules_incompatible_with_newlib_signed_transition_parser": [
+    "America/Godthab",
+    "America/Nuuk",
+    "America/Scoresbysund"
+  ],
+  "data_license": "IANA tz database data is public domain; Python tzdata package Apache-2.0. Only derived IANA data is included in the generated header."
+}

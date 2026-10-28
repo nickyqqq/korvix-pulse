@@ -1,0 +1,62 @@
+{%- comment -%}
+  Home page: the assembly film (all four products building themselves), muted and looping.
+  It plays only while it's on screen; with reduced motion it shows the poster and a play control.
+{%- endcomment -%}
+<section class="kv-assembly" aria-labelledby="KorvixAssembly-{{ section.id }}">
+  <div class="kv-assembly__inner">
+    {%- if section.settings.heading != blank -%}
+      <h2 class="kv-assembly__title" id="KorvixAssembly-{{ section.id }}">{{ section.settings.heading | escape }}</h2>
+    {%- else -%}
+      <h2 class="kv-assembly__title visually-hidden" id="KorvixAssembly-{{ section.id }}">How Korvix gadgets are put together</h2>
+    {%- endif -%}
+    <div class="kv-assembly__frame">
+      <video class="kv-assembly__video" data-kv-assembly
+        src="{{ 'korvix-assembly.mp4' | asset_url }}" poster="{{ 'korvix-assembly-poster.jpg' | asset_url }}"
+        muted loop playsinline preload="metadata" disablepictureinpicture
+        aria-label="Animation: Korvix Pulse, MarketPlay, X Tracker and Spot Finder assembling from their parts and turning on"></video>
+    </div>
+  </div>
+</section>
+
+<style>
+  .kv-assembly { background: #fff; padding: 24px 0 96px; }
+  .kv-assembly__inner { width: min(1240px, calc(100% - 64px)); margin: 0 auto; }
+  .kv-assembly__title {
+    margin: 0 0 28px; text-align: center; color: #080808; font-family: Arial, Helvetica, sans-serif; font-weight: 900;
+    font-size: clamp(40px, 4.6vw, 66px); line-height: .95; letter-spacing: -.055em; text-transform: uppercase; text-wrap: balance;
+  }
+  .kv-assembly__frame { max-width: 1100px; margin: 0 auto; aspect-ratio: 16 / 9; }
+  .kv-assembly__video { display: block; width: 100%; height: 100%; object-fit: cover; background: #fff; }
+  @media screen and (max-width: 749px) {
+    .kv-assembly { padding: 8px 0 64px; }
+    .kv-assembly__inner { width: calc(100% - 32px); }
+    .kv-assembly__title { margin-bottom: 18px; }
+  }
+</style>
+
+<script>
+  (function () {
+    var v = document.querySelector('#shopify-section-{{ section.id }} [data-kv-assembly]');
+    if (!v) return;
+    var reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    if (reduce) { v.controls = true; return; }
+    if (!('IntersectionObserver' in window)) { v.play().catch(function () {}); return; }
+    new IntersectionObserver(function (entries) {
+      entries.forEach(function (e) {
+        if (e.isIntersecting) { v.play().catch(function () {}); } else { v.pause(); }
+      });
+    }, { threshold: 0.25 }).observe(v);
+  })();
+</script>
+
+{% schema %}
+{
+  "name": "Korvix assembly video",
+  "tag": "section",
+  "class": "section-korvix-assembly",
+  "settings": [
+    { "type": "text", "id": "heading", "label": "Heading (optional)", "default": "Built piece by piece." }
+  ],
+  "presets": [{ "name": "Korvix assembly video" }]
+}
+{% endschema %}

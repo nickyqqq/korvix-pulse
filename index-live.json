@@ -1,0 +1,206 @@
+{
+  "sections": {
+    "korvix_campaign": {
+      "type": "korvix-campaign",
+      "settings": {
+        "heading": "DESK LIFE.",
+        "heading_second": "UPGRADED.",
+        "description": "PULSE + MARKETPLAY. SMALL SCREENS. BIG PERSONALITY.",
+        "product": "magic-clock-smart-desk-clock-with-dynamic-display",
+        "companion_product": "korvix-marketplay",
+        "link": "shopify://collections/all",
+        "composition": "collection",
+        "background": "#f1f1ef",
+        "accent": "#d8dbe0",
+        "is_first": true
+      }
+    },
+    "korvix_features": {
+      "type": "korvix-feature-band",
+      "blocks": {
+        "day_night": { "type": "feature", "settings": { "feature": "day_night" } },
+        "gifs": { "type": "feature", "settings": { "feature": "gifs" } },
+        "focus": { "type": "feature", "settings": { "feature": "focus" } },
+        "marketplay": { "type": "feature", "settings": { "feature": "marketplay" } },
+        "battery": { "type": "feature", "settings": { "feature": "battery" } }
+      },
+      "block_order": ["day_night", "gifs", "focus", "marketplay", "battery"],
+      "settings": {
+        "pulse_product": "magic-clock-smart-desk-clock-with-dynamic-display",
+        "market_product": "korvix-marketplay",
+        "battery_product": "korvix-pulse-battery-powered"
+      }
+    },
+    "korvix_assembly_video": {
+      "type": "korvix-assembly-video",
+      "settings": {
+        "heading": "Built piece by piece."
+      }
+    },
+    "korvix_home_tour": {
+      "type": "korvix-home-tour",
+      "settings": {
+        "eyebrow": "",
+        "heading": "See them in action.",
+        "description": ""
+      }
+    },
+    "korvix_reviews": {
+      "type": "korvix-reviews",
+      "blocks": {
+        "sample_01": { "type": "sample_review", "settings": { "sample_text": "Sample: A place for a real customer to describe their Korvix experience." } },
+        "sample_02": { "type": "sample_review", "settings": { "sample_text": "Sample: Add a genuine first impression of Pulse here." } },
+        "sample_03": { "type": "sample_review", "settings": { "sample_text": "Sample: A real customer could share a photo of their desk here." } },
+        "sample_04": { "type": "sample_review", "settings": { "sample_text": "Sample: Leave room for an honest MarketPlay story." } },
+        "sample_05": { "type": "sample_review", "settings": { "sample_text": "Sample: This space is ready for feedback from a real owner." } },
+        "sample_06": { "type": "sample_review", "settings": { "sample_text": "Sample: Replace this placeholder with a customer's own words." } }
+      },
+      "block_order": ["sample_01", "sample_02", "sample_03", "sample_04", "sample_05", "sample_06"],
+      "settings": {
+        "show_samples": true,
+        "heading": "A space for real stories."
+      }
+    },
+    "image_banner_nnX3hw": {
+      "type": "image-banner",
+      "blocks": {
+        "heading_xgbkk3": { "type": "heading", "settings": { "heading": "Time is Always Moving. Make it Beautiful.", "heading_size": "h1" } },
+        "text_dbnLik": { "type": "text", "settings": { "text": "Designed for your desk. Built for your vibe.", "text_style": "body" } },
+        "buttons_9NwRzk": { "type": "buttons", "settings": { "button_label_1": "Shop Now", "button_link_1": "shopify://collections/all", "button_style_secondary_1": false, "button_label_2": "", "button_link_2": "", "button_style_secondary_2": false } }
+      },
+      "block_order": ["heading_xgbkk3", "text_dbnLik", "buttons_9NwRzk"],
+      "name": "t:sections.image-banner.presets.name",
+      "settings": {
+        "image": "shopify://shop_images/photo_2026-10-07_10-52-12.jpg",
+        "image_2": "shopify://shop_images/photo_2026-10-07_11-02-36.jpg",
+        "image_overlay_opacity": 20,
+        "image_height": "large",
+        "image_behavior": "none",
+        "desktop_content_position": "middle-left",
+        "desktop_content_alignment": "left",
+        "show_text_box": false,
+        "color_scheme": "scheme-4",
+        "stack_images_on_mobile": false,
+        "mobile_content_alignment": "center",
+        "show_text_below": false
+      }
+    },
+    "featured_product_wmzmXG": {
+      "type": "featured-product",
+      "blocks": {
+        "text_eWxJdd": { "type": "text", "settings": { "text": "{{ section.settings.product.vendor }}", "text_style": "uppercase" } },
+        "title_EEnBjK": { "type": "title", "settings": { "heading_size": "h1" } },
+        "price_cLyyKy": { "type": "price", "settings": {} },
+        "variant_picker_djJ8Q7": { "type": "variant_picker", "settings": { "picker_type": "button", "swatch_shape": "circle" } },
+        "quantity_selector_dd8nDz": { "type": "quantity_selector", "settings": {} },
+        "buy_buttons_WRqGpG": { "type": "buy_buttons", "settings": { "show_dynamic_checkout": true, "show_gift_card_recipient": true } },
+        "share_kdjndW": { "type": "share", "settings": { "share_label": "Share" } }
+      },
+      "block_order": ["text_eWxJdd", "title_EEnBjK", "price_cLyyKy", "variant_picker_djJ8Q7", "quantity_selector_dd8nDz", "buy_buttons_WRqGpG", "share_kdjndW"],
+      "name": "t:sections.featured-product.presets.name",
+      "settings": {
+        "product": "magic-clock-smart-desk-clock-with-dynamic-display",
+        "color_scheme": "scheme-1",
+        "secondary_background": false,
+        "media_size": "medium",
+        "constrain_to_viewport": true,
+        "media_fit": "contain",
+        "media_position": "left",
+        "image_zoom": "lightbox",
+        "hide_variants": false,
+        "enable_video_looping": false,
+        "padding_top": 80,
+        "padding_bottom": 72
+      }
+    },
+    "rich-text": {
+      "type": "rich-text",
+      "blocks": {
+        "text_zRCBHz": { "type": "text", "settings": { "text": "<p>The Magic Clock is more than a timepiece — it's a living display that adapts to your mood, your space, and your style. Choose Day/Night Mode to let the background shift naturally from sunrise to sunset, or upload any GIF to make it truly yours. Compact, modern, and effortless to set up — it's the perfect touch for any desk, nightstand, or creative setup.</p>" } },
+        "heading": { "type": "heading", "settings": { "heading": "More Than Just a Clock", "heading_size": "h2" } }
+      },
+      "block_order": ["heading", "text_zRCBHz"],
+      "settings": {
+        "desktop_content_position": "center",
+        "content_alignment": "center",
+        "color_scheme": "scheme-1",
+        "full_width": true,
+        "padding_top": 12,
+        "padding_bottom": 72
+      }
+    },
+    "korvix_market_campaign": {
+      "type": "korvix-campaign",
+      "settings": {
+        "heading": "MAKE YOUR",
+        "heading_second": "NEXT MOVE.",
+        "description": "KORVIX MARKETPLAY. A NEW WAY TO PLAY.",
+        "product": "korvix-marketplay",
+        "composition": "market",
+        "background": "#edf0f4",
+        "accent": "#c6cdd8",
+        "is_first": false
+      }
+    },
+    "korvix_market_spotlight": {
+      "type": "korvix-studio",
+      "settings": {
+        "show_hero": false,
+        "show_lineup": false,
+        "show_closing": false,
+        "market_product": "korvix-marketplay"
+      }
+    },
+    "korvix_studio": {
+      "type": "korvix-studio",
+      "blocks": {
+        "pulse_original": { "type": "product_card", "settings": { "product": "magic-clock-smart-desk-clock-with-dynamic-display", "product_family": "pulse", "edition": "original" } },
+        "pulse_battery": { "type": "product_card", "settings": { "product": "korvix-pulse-battery-powered", "product_family": "pulse", "edition": "battery" } },
+        "marketplay_original": { "type": "product_card", "settings": { "product": "korvix-marketplay", "product_family": "marketplay", "edition": "original" } },
+        "marketplay_battery": { "type": "product_card", "settings": { "product": "korvix-marketplay-battery-powered", "product_family": "marketplay", "edition": "battery" } }
+      },
+      "block_order": ["pulse_original", "pulse_battery", "marketplay_original", "marketplay_battery"],
+      "settings": {
+        "show_hero": false,
+        "show_lineup": true,
+        "show_closing": false,
+        "hero_product": "",
+        "pulse_product": "",
+        "market_product": ""
+      }
+    },
+    "collage-1": {
+      "type": "collage",
+      "blocks": {
+        "image_rgAAUW": { "type": "image", "settings": { "image": "shopify://shop_images/photo_2026-10-07_10-52-12.jpg" } },
+        "image": { "type": "image", "settings": { "image": "shopify://shop_images/photo_2026-10-06_16-52-55.jpg" } },
+        "collection": { "type": "collection", "settings": { "collection": "all" } }
+      },
+      "block_order": ["image_rgAAUW", "image", "collection"],
+      "settings": {
+        "heading": "Made for your space.",
+        "heading_size": "h2",
+        "desktop_layout": "left",
+        "mobile_layout": "collage",
+        "card_styles": "product-card-wrapper",
+        "color_scheme": "scheme-1",
+        "padding_top": 28,
+        "padding_bottom": 76
+      }
+    }
+  },
+  "order": [
+    "korvix_campaign",
+    "korvix_features",
+    "korvix_assembly_video",
+    "korvix_home_tour",
+    "korvix_reviews",
+    "image_banner_nnX3hw",
+    "featured_product_wmzmXG",
+    "rich-text",
+    "korvix_market_campaign",
+    "korvix_market_spotlight",
+    "korvix_studio",
+    "collage-1"
+  ]
+}
